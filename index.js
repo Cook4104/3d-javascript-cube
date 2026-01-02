@@ -1,6 +1,10 @@
 const ctx = mainCanvas.getContext("2d")
-const WIDTH = mainCanvas.width
-const HEIGHT = mainCanvas.height
+
+window.onload = window.onresize = function(){
+  mainCanvas.width = window.innerWidth;
+  mainCanvas.height = window.innerHeight;
+}
+
 const SQUARE_SIZE = 5
 const HALF_SQUARE_SIZE = SQUARE_SIZE/2
 
@@ -64,7 +68,7 @@ lineIndices = [
 
 function clearScreen(){
   ctx.fillStyle = "black"
-  ctx.fillRect(0,0,WIDTH,HEIGHT)
+  ctx.fillRect(0,0,mainCanvas.width,mainCanvas.height)
 }
 
 function renderSquare({x,y}){
@@ -86,8 +90,8 @@ function renderSquareInWorld({x,y,z}){
 
   xPixel = (xProj+1)*.5
   yPixel = 1-((yProj+1)*.5)
-  xPixel *= WIDTH
-  yPixel *= HEIGHT
+  xPixel *= mainCanvas.width
+  yPixel *= mainCanvas.height
   renderSquare({x:xPixel,y:yPixel})
 
 }
@@ -98,8 +102,8 @@ function renderLineInWorld({x:x1,y:y1,z:z1},{x:x2,y:y2,z:z2}){
 
   xPixel1 = (xProj1+1)*.5
   yPixel1 = 1-((yProj1+1)*.5)
-  xPixel1 *= WIDTH
-  yPixel1 *= HEIGHT
+  xPixel1 *= mainCanvas.width
+  yPixel1 *= mainCanvas.height
   
 
   xProj2 = x2/z2;
@@ -107,8 +111,8 @@ function renderLineInWorld({x:x1,y:y1,z:z1},{x:x2,y:y2,z:z2}){
 
   xPixel2 = (xProj2+1)*.5
   yPixel2 = 1-((yProj2+1)*.5)
-  xPixel2 *= WIDTH
-  yPixel2 *= HEIGHT
+  xPixel2 *= mainCanvas.width
+  yPixel2 *= mainCanvas.height
   
   renderLine({x:xPixel1,y:yPixel1},{x:xPixel2,y:yPixel2})
 }
@@ -141,7 +145,6 @@ function mainLoop(){
   clearScreen()
 
 //  renderLineInWorld({x:0,y:0,z:1},{x:0.5,y:0.5,z:1})
-  renderSquareInWorld({x:0,y:0.5,z:0.5}) 
   renderVerts(verts,2,time,time)
   renderIndices(verts,lineIndices,2,time,time);
   setTimeout(() => {requestAnimationFrame(mainLoop)}
