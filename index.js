@@ -1,8 +1,18 @@
 const ctx = mainCanvas.getContext("2d")
 
+let WIDTH;
+let HEIGHT;
+let ASPECT;
+let FOV = 90.0 * (Math.PI/180);
+
 window.onload = window.onresize = function(){
+  
   mainCanvas.width = window.innerWidth;
   mainCanvas.height = window.innerHeight;
+
+  WIDTH = window.innerWidth;
+  HEIGHT = window.innerHeight;
+  ASPECT = WIDTH/HEIGHT;
 }
 
 const SQUARE_SIZE = 5
@@ -68,7 +78,7 @@ lineIndices = [
 
 function clearScreen(){
   ctx.fillStyle = "black"
-  ctx.fillRect(0,0,mainCanvas.width,mainCanvas.height)
+  ctx.fillRect(0,0,WIDTH,HEIGHT)
 }
 
 function renderSquare({x,y}){
@@ -85,34 +95,47 @@ function renderLine({x:x1,y:y1},{x:x2,y:y2}){
 }
 
 function renderSquareInWorld({x,y,z}){
-  xProj = x/z;
-  yProj = y/z;
+  halfFov = FOV*0.5;
+  xProj = x * (1/ASPECT*Math.tan(halfFov));
+  yProj = y * (1/Math.tan(halfFov))
+
+  xProj /= z;
+  yProj /= z;
 
   xPixel = (xProj+1)*.5
   yPixel = 1-((yProj+1)*.5)
-  xPixel *= mainCanvas.width
-  yPixel *= mainCanvas.height
+  xPixel *= WIDTH
+  yPixel *= HEIGHT
   renderSquare({x:xPixel,y:yPixel})
 
 }
 
 function renderLineInWorld({x:x1,y:y1,z:z1},{x:x2,y:y2,z:z2}){
-  xProj1 = x1/z1;
-  yProj1 = y1/z1;
+  halfFov = FOV*0.5;
+
+  xProj1 = x1 * (1/ASPECT*Math.tan(halfFov));
+  yProj1 = y1 * (1/Math.tan(halfFov))
+
+
+  xProj1 /= z1;
+  yProj1 /= z1;
 
   xPixel1 = (xProj1+1)*.5
   yPixel1 = 1-((yProj1+1)*.5)
-  xPixel1 *= mainCanvas.width
-  yPixel1 *= mainCanvas.height
+  xPixel1 *= WIDTH
+  yPixel1 *= HEIGHT
   
 
-  xProj2 = x2/z2;
-  yProj2 = y2/z2;
+  xProj2 = x2 * (1/ASPECT*Math.tan(halfFov));
+  yProj2 = y2 * (1/Math.tan(halfFov))
+  
+  xProj2 /= z2;
+  yProj2 /= z2;
 
   xPixel2 = (xProj2+1)*.5
   yPixel2 = 1-((yProj2+1)*.5)
-  xPixel2 *= mainCanvas.width
-  yPixel2 *= mainCanvas.height
+  xPixel2 *= WIDTH
+  yPixel2 *= HEIGHT
   
   renderLine({x:xPixel1,y:yPixel1},{x:xPixel2,y:yPixel2})
 }
