@@ -1,9 +1,9 @@
 const ctx = mainCanvas.getContext("2d")
 
-let WIDTH;
-let HEIGHT;
-let ASPECT;
-let FOV = 90.0 * (Math.PI/180);
+let WIDTH
+let HEIGHT
+let ASPECT
+let FOV = 90.0 * (Math.PI/180)
 
 window.onload = window.onresize = function(){
   
